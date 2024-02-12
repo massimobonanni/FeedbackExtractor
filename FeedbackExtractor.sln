@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34408.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackExtractor.Client", "FeedbackExtractor.Client\FeedbackExtractor.Client.csproj", "{866B7F80-5AB2-4C94-9EC3-0F71310B3030}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackExtractor.Core", "FeedbackExtractor.Core\FeedbackExtractor.Core.csproj", "{028547E1-F44C-4081-AE6A-A0B9CB807E52}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C455D38D-8312-471D-A9B5-8AA4B77AA9EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackExtractor.Core.Test", "Tests\FeedbackExtractor.Core.Test\FeedbackExtractor.Core.Test.csproj", "{4DD4F326-B3B6-4F82-90D7-5D3DCEED7E0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackExtractor.OpenAI", "FeedbackExtractor.OpenAI\FeedbackExtractor.OpenAI.csproj", "{CC446747-B5F4-4114-899D-9A28DCDCB35D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackExtractor.DocumentIntelligence", "FeedbackExtractor.DocumentIntelligence\FeedbackExtractor.DocumentIntelligence.csproj", "{484CB025-0B26-4A99-9730-8A87FF62E110}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentIntelligence", "DocumentIntelligence", "{C4803E38-A22A-43DE-810E-756D0D0E75F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{866B7F80-5AB2-4C94-9EC3-0F71310B3030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{866B7F80-5AB2-4C94-9EC3-0F71310B3030}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{866B7F80-5AB2-4C94-9EC3-0F71310B3030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{866B7F80-5AB2-4C94-9EC3-0F71310B3030}.Release|Any CPU.Build.0 = Release|Any CPU
+		{028547E1-F44C-4081-AE6A-A0B9CB807E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{028547E1-F44C-4081-AE6A-A0B9CB807E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{028547E1-F44C-4081-AE6A-A0B9CB807E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{028547E1-F44C-4081-AE6A-A0B9CB807E52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DD4F326-B3B6-4F82-90D7-5D3DCEED7E0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DD4F326-B3B6-4F82-90D7-5D3DCEED7E0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DD4F326-B3B6-4F82-90D7-5D3DCEED7E0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DD4F326-B3B6-4F82-90D7-5D3DCEED7E0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC446747-B5F4-4114-899D-9A28DCDCB35D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC446747-B5F4-4114-899D-9A28DCDCB35D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC446747-B5F4-4114-899D-9A28DCDCB35D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC446747-B5F4-4114-899D-9A28DCDCB35D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484CB025-0B26-4A99-9730-8A87FF62E110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484CB025-0B26-4A99-9730-8A87FF62E110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484CB025-0B26-4A99-9730-8A87FF62E110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484CB025-0B26-4A99-9730-8A87FF62E110}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4DD4F326-B3B6-4F82-90D7-5D3DCEED7E0D} = {C455D38D-8312-471D-A9B5-8AA4B77AA9EA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38A13634-150C-4538-ADD2-E9256A90D272}
+	EndGlobalSection
+EndGlobal
