@@ -10,6 +10,10 @@ namespace FeedbackExtractor.OpenAI.Configurations
         public string Endpoint { get; set; }
         public string ModelName { get; set; }
 
+        public string FullUrl { 
+            get => $"{this.Endpoint}/openai/deployments/{this.ModelName}/chat/completions?api-version=2023-07-01-preview"; 
+        }
+
         public static OpenAIFeedbackExtractorConfiguration Load(IConfiguration config)
         {
             var retVal = new OpenAIFeedbackExtractorConfiguration();

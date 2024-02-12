@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Net.Http;
 using System.ServiceProcess;
 using System.Windows;
 
@@ -42,6 +43,7 @@ namespace FeedbackExtractor.Client
                 .AddKeyedSingleton<IFeedbackExtractor, CustomFeedbackExtractor>(ExtractorImplementations.DocumentIntelligence_Custom)
                 .AddKeyedSingleton<IFeedbackExtractor, OpenAIFeedbackExtractor>(ExtractorImplementations.OpenAI)
                 .AddTransient<MainWindowViewModel>()
+                .AddHttpClient()
                 .AddLogging()
                 .BuildServiceProvider()
             );
