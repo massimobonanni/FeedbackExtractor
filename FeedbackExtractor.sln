@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackExtractor.OpenAI", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackExtractor.DocumentIntelligence", "FeedbackExtractor.DocumentIntelligence\FeedbackExtractor.DocumentIntelligence.csproj", "{484CB025-0B26-4A99-9730-8A87FF62E110}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentIntelligence", "DocumentIntelligence", "{C4803E38-A22A-43DE-810E-756D0D0E75F7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
