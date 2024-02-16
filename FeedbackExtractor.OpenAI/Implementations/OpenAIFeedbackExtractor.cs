@@ -1,17 +1,13 @@
-﻿using Azure;
-using Azure.AI.OpenAI;
-using FeedbackExtractor.Core.Entities;
-using FeedbackExtractor.Core.Interfaces;
+﻿using FeedbackExtractor.Core.Interfaces;
 using FeedbackExtractor.OpenAI.Configurations;
 using FeedbackExtractor.OpenAI.Entities;
 using FeedbackExtractor.OpenAI.Utilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Text;
-using OpenAiEntities= FeedbackExtractor.OpenAI.Entities ;
-using CoreEntities= FeedbackExtractor.Core.Entities;
+using OpenAiEntities = FeedbackExtractor.OpenAI.Entities;
+using CoreEntities = FeedbackExtractor.Core.Entities;
 
 namespace FeedbackExtractor.OpenAI.Implementations
 {

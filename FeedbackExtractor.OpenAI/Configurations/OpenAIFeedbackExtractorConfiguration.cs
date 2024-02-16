@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace FeedbackExtractor.OpenAI.Configurations
 {

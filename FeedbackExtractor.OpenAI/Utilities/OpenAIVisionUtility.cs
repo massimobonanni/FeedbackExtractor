@@ -1,14 +1,7 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FeedbackExtractor.OpenAI.Utilities
+﻿namespace FeedbackExtractor.OpenAI.Utilities
 {
-    
-<summary>
+
+    ///<summary>
     /// Utility class for generating payload for feedback form in OpenAI Vision.
     /// </summary>
     internal static class OpenAIVisionUtility
