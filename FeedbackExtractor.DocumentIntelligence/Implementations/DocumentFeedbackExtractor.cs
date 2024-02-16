@@ -5,26 +5,35 @@ using FeedbackExtractor.Core.Interfaces;
 using FeedbackExtractor.DocumentIntelligence.Configurations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Azure.Core;
 
 namespace FeedbackExtractor.DocumentIntelligence.Implementations
 {
+
+    /// <summary>
+    /// Extracts session feedback from a document using Azure Document Intelligence.
+    /// </summary>
     public class DocumentFeedbackExtractor : IFeedbackExtractor
     {
         private readonly DocumentFeedbackExtractorConfiguration config;
         private readonly ILogger<DocumentFeedbackExtractor> logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DocumentFeedbackExtractor"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="logger">The logger.</param>
         public DocumentFeedbackExtractor(IConfiguration configuration, ILogger<DocumentFeedbackExtractor> logger)
         {
             this.config = DocumentFeedbackExtractorConfiguration.Load(configuration);
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Extracts session feedback asynchronously from a source document.
+        /// </summary>
+        /// <param name="sourceDocument">The source document.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The extracted session feedback.</returns>
         public async Task<SessionFeedback> ExtractSessionFeedbackAsync(Stream sourceDocument, CancellationToken cancellationToken = default)
         {
             var session = new SessionFeedback();
@@ -33,10 +42,10 @@ namespace FeedbackExtractor.DocumentIntelligence.Implementations
             DocumentIntelligenceClient client = new DocumentIntelligenceClient(new Uri(this.config.Endpoint), credential);
 
             var options = new List<DocumentAnalysisFeature>() {
-                DocumentAnalysisFeature.OcrHighResolution,
-                DocumentAnalysisFeature.Languages,
-                DocumentAnalysisFeature.KeyValuePairs
-            };
+                    DocumentAnalysisFeature.OcrHighResolution,
+                    DocumentAnalysisFeature.Languages,
+                    DocumentAnalysisFeature.KeyValuePairs
+                };
 
             var request = new AnalyzeDocumentContent();
             request.Base64Source = BinaryData.FromStream(sourceDocument);
@@ -68,10 +77,10 @@ namespace FeedbackExtractor.DocumentIntelligence.Implementations
         private SessionFeedback ToSessionFeedback(AnalyzeResult source)
         {
             var session = new SessionFeedback();
-            session.EventName = source.GetKeyValue("Event Name:",this.config.MinimumConfidence);
+            session.EventName = source.GetKeyValue("Event Name:", this.config.MinimumConfidence);
             session.SessionCode = source.GetKeyValue("Session Code:", this.config.MinimumConfidence);
 
-            var qualityTables= source.Tables
+            var qualityTables = source.Tables
                 .Select((t, i) => new { Table = t, Index = i })
                 .Where(a => a.Table.RowCount == 2 && a.Table.ColumnCount == 5)
                 .ToArray();

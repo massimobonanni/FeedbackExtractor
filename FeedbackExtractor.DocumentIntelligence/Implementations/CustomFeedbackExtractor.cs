@@ -5,26 +5,36 @@ using FeedbackExtractor.Core.Interfaces;
 using FeedbackExtractor.DocumentIntelligence.Configurations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FeedbackExtractor.DocumentIntelligence.Implementations
 {
+
+    /// <summary>
+    /// Custom implementation of the IFeedbackExtractor interface.
+    /// </summary>
     public class CustomFeedbackExtractor : IFeedbackExtractor
     {
 
         private readonly CustomFeedbackExtractorConfiguration config;
         private readonly ILogger<CustomFeedbackExtractor> logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomFeedbackExtractor"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="logger">The logger.</param>
         public CustomFeedbackExtractor(IConfiguration configuration, ILogger<CustomFeedbackExtractor> logger)
         {
             this.config = CustomFeedbackExtractorConfiguration.Load(configuration);
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Extracts session feedback asynchronously from the source document.
+        /// </summary>
+        /// <param name="sourceDocument">The source document.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The extracted session feedback.</returns>
         public async Task<SessionFeedback> ExtractSessionFeedbackAsync(Stream sourceDocument, CancellationToken cancellationToken = default)
         {
             var session = new SessionFeedback();
@@ -33,9 +43,9 @@ namespace FeedbackExtractor.DocumentIntelligence.Implementations
             DocumentIntelligenceClient client = new DocumentIntelligenceClient(new Uri(this.config.Endpoint), credential);
 
             var options = new List<DocumentAnalysisFeature>() {
-                DocumentAnalysisFeature.OcrHighResolution,
-                DocumentAnalysisFeature.Languages
-            };
+                    DocumentAnalysisFeature.OcrHighResolution,
+                    DocumentAnalysisFeature.Languages
+                };
 
             var request = new AnalyzeDocumentContent();
             request.Base64Source = BinaryData.FromStream(sourceDocument);
@@ -52,7 +62,9 @@ namespace FeedbackExtractor.DocumentIntelligence.Implementations
 
                 if (operation.HasValue)
                 {
-                    session=ToSessionFeedback(operation.Value);
+                    var firstDocument = operation.Value.Documents.FirstOrDefault();
+                    if (firstDocument != null)
+                        session = firstDocument.ToSessionFeedback(this.config.MinimumConfidence);
                 }
             }
             catch (Exception ex)
@@ -64,40 +76,5 @@ namespace FeedbackExtractor.DocumentIntelligence.Implementations
             return session;
         }
 
-        private SessionFeedback ToSessionFeedback(AnalyzeResult source)
-        {
-            var session = new SessionFeedback();
-
-            var document = source.Documents.FirstOrDefault();
-            if (document == null)
-                return session;
-
-            if (document.Fields.ContainsKey("EventName"))
-                session.EventName = document.Fields["EventName"]?.Content;
-            if (document.Fields.ContainsKey("SessionCode"))
-                session.SessionCode = document.Fields["SessionCode"]?.Content;
-
-            session.EventQuality= ExtractSelectionMarkValue("EventQuality", document.Fields);
-            session.SessionQuality= ExtractSelectionMarkValue("SessionQuality", document.Fields);
-            session.SpeakerQuality= ExtractSelectionMarkValue("SpeakerQuality", document.Fields);
-
-            if (document.Fields.ContainsKey("Comment"))
-                session.Comment = document.Fields["Comment"]?.Content;
-
-            return session;
-        }
-
-        private int? ExtractSelectionMarkValue(string fieldPrefix, IReadOnlyDictionary<string,DocumentField> fields)
-        {
-            for (int i = 1; i <= 5; i++)
-            {
-                var fieldName = $"{fieldPrefix}{i}";
-                if (fields.ContainsKey(fieldName) && fields[fieldName]?.ValueSelectionMark == "selected")
-                {
-                    return i;
-                }
-            }
-            return null;
-        }
     }
 }
