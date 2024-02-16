@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FeedbackExtractor.Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="640" Width="800">
+        Title="MainWindow" Height="1080" Width="1920">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -31,7 +31,7 @@
             <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5">Export type</Label>
             <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" 
                       ItemsSource="{Binding ExtractionTypes}" SelectedItem="{Binding SelectedExtractionType}" 
-                      IsEnabled="{Binding IsBusy,Converter={StaticResource OppositeConverter}}">
+                      IsEnabled="{Binding IsBusy,Converter={StaticResource OppositeBoolConverter}}">
             </ComboBox>
 
             <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,5,0,5" Command="{Binding SelectFileCommand}">Select File</Button>
@@ -41,7 +41,8 @@
             <Button Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,5,0,5" Command="{Binding ExtractSessionFeedbackCommand}">Extract Feedback</Button>
 
         </Grid>
-        <Grid x:Name="resultPanel"  Grid.Column="1" Grid.Row="0">
+        <Grid x:Name="resultPanel"  Grid.Column="1" Grid.Row="0" 
+              Visibility="{Binding ExtractedSessionFeedback,Converter={StaticResource NotNullToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -50,13 +51,15 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontWeight="ExtraBold">Session Feedback</Label>
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                   HorizontalAlignment="Center" FontWeight="ExtraBold" FontSize="20">Session Feedback</Label>
             <Label Grid.Row="1" Grid.Column="0" Margin="0,5,0,5">Event Name</Label>
             <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" Text="{Binding ExtractedSessionFeedback.EventName}" IsReadOnly="True"/>
             <Label Grid.Row="2" Grid.Column="0" Margin="0,5,0,5">Session Code</Label>
@@ -69,7 +72,18 @@
             <TextBox Grid.Row="5" Grid.Column="1" Margin="0,5,0,5" Text="{Binding ExtractedSessionFeedback.SpeakerQuality}" IsReadOnly="True"/>
             <Label Grid.Row="6" Grid.Column="0" Margin="0,5,0,5">Comment</Label>
             <TextBox  Grid.Row="6" Grid.Column="1" Margin="0,5,0,5" Text="{Binding ExtractedSessionFeedback.Comment}" IsReadOnly="True" TextWrapping="Wrap"/>
-
+            <StackPanel Name="SessionValid" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" 
+                        Orientation="Horizontal" HorizontalAlignment="Center"
+                        Visibility="{Binding IsExtractedSessionValid, Converter={StaticResource VisibilityConverter}}">
+                <Image Source="/information.png" Height="32" Width="32"/>
+                <Label Margin="5" FontSize="20" Foreground="#FF349400">Feedback Session valid!</Label>
+            </StackPanel>
+            <StackPanel Name="SessionInvalid" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" 
+                        Orientation="Horizontal" HorizontalAlignment="Center"
+                        Visibility="{Binding IsExtractedSessionValid, Converter={StaticResource VisibilityToOppositeBoolConverter}}">
+                <Image Source="/error.png" Height="32" Width="32"/>
+                <Label Margin="5" FontSize="20" Foreground="#FFFF0101">Feedback Session invalid!</Label>
+            </StackPanel>
         </Grid>
         <StackPanel x:Name="BottomPanel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,10" >
             <ProgressBar DockPanel.Dock="Top" Height="20" IsIndeterminate="{Binding IsBusy}" 

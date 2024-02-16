@@ -33,6 +33,8 @@ namespace FeedbackExtractor.Client.ViewModels
                 ExtractorImplementations.DocumentIntelligence_Base,
                 ExtractorImplementations.DocumentIntelligence_Custom,
             ];
+            this.ExtractedSessionFeedback = null;
+            this.IsExtractedSessionValid = false;
 
             _messenger.Register<FileSelectedMessage>(this, FileSelectedMessageHandler);
         }
@@ -47,6 +49,11 @@ namespace FeedbackExtractor.Client.ViewModels
             using var fileStream = File.OpenRead(DocumentFilePath);
 
             this.ExtractedSessionFeedback = await feedbackExtractor.ExtractSessionFeedbackAsync(fileStream);
+
+            if (this.ExtractedSessionFeedback != null)
+                this.IsExtractedSessionValid = this.ExtractedSessionFeedback.IsValid();
+            else
+                this.IsExtractedSessionValid = false;
 
             this.IsBusy = false;
         }
@@ -101,6 +108,9 @@ namespace FeedbackExtractor.Client.ViewModels
 
         [ObservableProperty]
         private SessionFeedback? extractedSessionFeedback;
+
+        [ObservableProperty]
+        private bool isExtractedSessionValid;
 
 
         [ObservableProperty]

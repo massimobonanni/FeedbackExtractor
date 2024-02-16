@@ -6,6 +6,8 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
-        <conv:BoolToOppositeBoolConverter x:Key="OppositeConverter" />
+        <conv:BoolToOppositeBoolConverter x:Key="OppositeBoolConverter" />
+        <conv:VisibilityToOppositeBoolConverter x:Key="VisibilityToOppositeBoolConverter" />
+        <conv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
     </Application.Resources>
 </Application>

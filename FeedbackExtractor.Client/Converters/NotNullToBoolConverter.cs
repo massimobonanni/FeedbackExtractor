@@ -7,17 +7,14 @@ using System.Windows.Data;
 
 namespace FeedbackExtractor.Client.Converters
 {
-    public class BoolToOppositeBoolConverter : IValueConverter
+    public class NotNullToBoolConverter : IValueConverter
     {
         #region IValueConverter Members
 
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            if (targetType != typeof(bool) && targetType != typeof(Boolean))
-                throw new InvalidOperationException("The target must be a boolean");
-
-            return !(bool)value;
+            return value == null ? false : true;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,
