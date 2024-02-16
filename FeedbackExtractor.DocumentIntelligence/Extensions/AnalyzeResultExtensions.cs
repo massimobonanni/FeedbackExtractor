@@ -12,7 +12,8 @@ namespace Azure.AI.DocumentIntelligence
 {
     internal static class AnalyzeResultExtensions
     {
-        internal static string GetKeyValue(this AnalyzeResult source, string keyname, bool caseSensitive = false)
+        internal static string GetKeyValue(this AnalyzeResult source, string keyname, 
+            float confidence,bool caseSensitive = false)
         {
             if (!caseSensitive)
             {
@@ -25,7 +26,7 @@ namespace Azure.AI.DocumentIntelligence
                 if (!caseSensitive)
                     key = key.ToLower();
 
-                if (key == keyname && item.Value!= null)
+                if (key == keyname && item.Confidence>=confidence && item.Value!= null)
                     return item.Value.Content;
             }
             return null;

@@ -68,8 +68,8 @@ namespace FeedbackExtractor.DocumentIntelligence.Implementations
         private SessionFeedback ToSessionFeedback(AnalyzeResult source)
         {
             var session = new SessionFeedback();
-            session.EventName = source.GetKeyValue("Event Name:");
-            session.SessionCode = source.GetKeyValue("Session Code:");
+            session.EventName = source.GetKeyValue("Event Name:",this.config.MinimumConfidence);
+            session.SessionCode = source.GetKeyValue("Session Code:", this.config.MinimumConfidence);
 
             var qualityTables= source.Tables
                 .Select((t, i) => new { Table = t, Index = i })
@@ -91,7 +91,7 @@ namespace FeedbackExtractor.DocumentIntelligence.Implementations
             if (speakerQuality.HasValue)
                 session.SpeakerQuality = speakerQuality + 1;
 
-            session.Comment = source.GetKeyValue("Comment:");
+            session.Comment = source.GetKeyValue("Comment:", this.config.MinimumConfidence);
             return session;
         }
     }
