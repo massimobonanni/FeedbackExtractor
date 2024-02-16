@@ -15,12 +15,21 @@ using CoreEntities= FeedbackExtractor.Core.Entities;
 
 namespace FeedbackExtractor.OpenAI.Implementations
 {
+    /// <summary>
+    /// Implementation of the IFeedbackExtractor interface using OpenAI.
+    /// </summary>
     public class OpenAIFeedbackExtractor : IFeedbackExtractor
     {
         private readonly OpenAIFeedbackExtractorConfiguration config;
         private readonly ILogger<OpenAIFeedbackExtractor> logger;
         private readonly HttpClient httpClient;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OpenAIFeedbackExtractor"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="httpClient">The HTTP client.</param>
         public OpenAIFeedbackExtractor(IConfiguration configuration, ILogger<OpenAIFeedbackExtractor> logger,
             HttpClient httpClient)
         {
@@ -29,6 +38,12 @@ namespace FeedbackExtractor.OpenAI.Implementations
             this.httpClient = httpClient;
         }
 
+        /// <summary>
+        /// Extracts session feedback asynchronously.
+        /// </summary>
+        /// <param name="sourceDocument">The source document.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The extracted session feedback.</returns>
         public async Task<CoreEntities.SessionFeedback> ExtractSessionFeedbackAsync(Stream sourceDocument, CancellationToken cancellationToken = default)
         {
             var encodedImage = sourceDocument.ToBase64String();
@@ -46,7 +61,7 @@ namespace FeedbackExtractor.OpenAI.Implementations
                 {
                     var responsePayload = await response.Content.ReadAsStringAsync();
 
-                    var visionResponse=JsonConvert.DeserializeObject<VisionResponse>(responsePayload);
+                    var visionResponse = JsonConvert.DeserializeObject<VisionResponse>(responsePayload);
 
                     if (visionResponse.choices.Any())
                     {
@@ -55,7 +70,7 @@ namespace FeedbackExtractor.OpenAI.Implementations
                         {
                             visionContent = $"{{{visionContent}";
                         }
-                        var responseData=JsonConvert.DeserializeObject<OpenAiEntities.SessionFeedback>(visionContent);
+                        var responseData = JsonConvert.DeserializeObject<OpenAiEntities.SessionFeedback>(visionContent);
                         return responseData.ToFeedbackSession();
                     }
                     else
