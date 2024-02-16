@@ -1,15 +1,20 @@
 ﻿using FeedbackExtractor.Core.Entities;
 using FeedbackExtractor.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FeedbackExtractor.Core.Implementations
 {
+
+    /// <summary>
+    /// Represents a mock implementation of the feedback extractor.
+    /// </summary>
     public class MockFeedbackExtractor : IFeedbackExtractor
     {
+        /// <summary>
+        /// Extracts session feedback asynchronously.
+        /// </summary>
+        /// <param name="sourceDocument">The source document stream.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The extracted session feedback.</returns>
         public Task<SessionFeedback> ExtractSessionFeedbackAsync(Stream sourceDocument, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(new SessionFeedback()
