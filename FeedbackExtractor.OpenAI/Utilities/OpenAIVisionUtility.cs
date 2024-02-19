@@ -1,4 +1,6 @@
-﻿namespace FeedbackExtractor.OpenAI.Utilities
+﻿using FeedbackExtractor.OpenAI.Entities;
+
+namespace FeedbackExtractor.OpenAI.Utilities
 {
 
     ///<summary>
@@ -11,8 +13,17 @@
         /// </summary>
         /// <param name="encodedImage">The encoded image to be included in the payload.</param>
         /// <returns>The generated payload for the feedback form.</returns>
-        public static object GeneratedPayloadForFeedbackForm(string? encodedImage)
+        public static object GeneratedPayloadForFeedbackForm(string? encodedImage,
+            ImageDetailParameter imageDetail = ImageDetailParameter.Auto)
         {
+            var detailString = imageDetail switch
+            {
+                ImageDetailParameter.Auto => "auto",
+                ImageDetailParameter.Low => "low",
+                ImageDetailParameter.High => "high",
+                _ => throw new ArgumentException("Invalid image detail parameter", nameof(imageDetail))
+            };
+
             return new
             {
                 messages = new object[]
@@ -32,7 +43,8 @@
                                   new {
                                       type = "image_url",
                                       image_url = new {
-                                          url = $"data:image/jpeg;base64,{encodedImage}"
+                                          url = $"data:image/jpeg;base64,{encodedImage}",
+                                          detail = detailString
                                       }
                                   },
                                   new {

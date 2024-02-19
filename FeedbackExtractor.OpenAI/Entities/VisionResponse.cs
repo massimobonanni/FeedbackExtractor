@@ -34,6 +34,11 @@
         /// Gets or sets the list of prompt filter results.
         /// </summary>
         public List<PromptFilterResult> prompt_filter_results { get; set; }
+
+        /// <summary>
+        /// Gets or sets the usage statistics.
+        /// </summary>
+        public Usage usage { get; set; }
     }
 
     /// <summary>
@@ -184,5 +189,25 @@
         public string severity { get; set; }
     }
 
+    /// <summary>
+    /// Represents the usage statistics.
+    /// </summary>
+    public class Usage
+    {
+        /// <summary>
+        /// Gets or sets the number of tokens used for prompts.
+        /// </summary>
+        public int prompt_tokens { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of tokens used for completions.
+        /// </summary>
+        public int completion_tokens { get; set; }
+
+        /// <summary>
+        /// Gets or sets the total number of tokens used.
+        /// </summary>
+        public int total_tokens { get; set; }
+    }
 
 }

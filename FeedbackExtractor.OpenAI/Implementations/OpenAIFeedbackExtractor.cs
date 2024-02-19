@@ -46,7 +46,7 @@ namespace FeedbackExtractor.OpenAI.Implementations
 
             httpClient.DefaultRequestHeaders.Add("api-key", this.config.Key);
 
-            var payload = OpenAIVisionUtility.GeneratedPayloadForFeedbackForm(encodedImage);
+            var payload = OpenAIVisionUtility.GeneratedPayloadForFeedbackForm(encodedImage,this.config.ImageDetail);
 
             try
             {
@@ -58,6 +58,8 @@ namespace FeedbackExtractor.OpenAI.Implementations
                     var responsePayload = await response.Content.ReadAsStringAsync();
 
                     var visionResponse = JsonConvert.DeserializeObject<VisionResponse>(responsePayload);
+
+                    this.logger.LogInformation($"Usage data: totalTokens={visionResponse.usage.total_tokens}; promptTokens={visionResponse.usage.prompt_tokens}; completionTokens={visionResponse.usage.completion_tokens}");
 
                     if (visionResponse.choices.Any())
                     {

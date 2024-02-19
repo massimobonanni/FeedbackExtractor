@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FeedbackExtractor.OpenAI.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace FeedbackExtractor.OpenAI.Configurations
 {
@@ -25,11 +26,16 @@ namespace FeedbackExtractor.OpenAI.Configurations
         public string ModelName { get; set; }
 
         /// <summary>
+        /// Gets or sets the image detail parameter for the OpenAI service.
+        /// </summary>
+        public ImageDetailParameter ImageDetail { get; set; } = ImageDetailParameter.Auto;
+
+        /// <summary>
         /// Gets the full URL for making chat completion requests to the OpenAI service.
         /// </summary>
         public string FullUrl
         {
-            get => $"{this.Endpoint}/openai/deployments/{this.ModelName}/chat/completions?api-version=2023-07-01-preview";
+            get => $"{this.Endpoint}/openai/deployments/{this.ModelName}/chat/completions?api-version=2023-12-01-preview";
         }
 
         /// <summary>
@@ -43,6 +49,10 @@ namespace FeedbackExtractor.OpenAI.Configurations
             retVal.Key = config[$"{ConfigRootName}:Key"];
             retVal.Endpoint = config[$"{ConfigRootName}:Endpoint"];
             retVal.ModelName = config[$"{ConfigRootName}:ModelName"];
+            if (Enum.TryParse<ImageDetailParameter>(config[$"{ConfigRootName}:ImageDetail"], true, out var imageDetail))
+            {
+                retVal.ImageDetail = imageDetail;
+            }
             return retVal;
         }
     }
