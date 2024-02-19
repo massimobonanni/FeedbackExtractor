@@ -32,6 +32,7 @@ namespace FeedbackExtractor.Client.ViewModels
                 ExtractorImplementations.OpenAI,
                 ExtractorImplementations.DocumentIntelligence_Base,
                 ExtractorImplementations.DocumentIntelligence_Custom,
+                ExtractorImplementations.Mixed_Models
             ];
             this.ExtractedSessionFeedback = null;
             this.IsExtractedSessionValid = false;
@@ -71,6 +72,7 @@ namespace FeedbackExtractor.Client.ViewModels
             switch (SelectedExtractionType)
             {
                 case ExtractorImplementations.OpenAI:
+                case ExtractorImplementations.Mixed_Models:
                     filter = "Images (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
                     break;
                 case ExtractorImplementations.DocumentIntelligence_Base:
@@ -117,6 +119,6 @@ namespace FeedbackExtractor.Client.ViewModels
         [NotifyCanExecuteChangedFor(nameof(SelectFileCommand))]
         [NotifyCanExecuteChangedFor(nameof(ExtractSessionFeedbackCommand))]
         private bool isBusy;
-        
+
     }
 }

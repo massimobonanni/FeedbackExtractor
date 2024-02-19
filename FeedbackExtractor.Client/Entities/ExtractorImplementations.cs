@@ -11,6 +11,7 @@ namespace FeedbackExtractor.Client.Entities
         Mock,
         DocumentIntelligence_Base,
         DocumentIntelligence_Custom,
-        OpenAI
+        OpenAI,
+        Mixed_Models
     }
 }

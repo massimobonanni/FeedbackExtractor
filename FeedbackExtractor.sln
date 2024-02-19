@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackExtractor.OpenAI", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackExtractor.DocumentIntelligence", "FeedbackExtractor.DocumentIntelligence\FeedbackExtractor.DocumentIntelligence.csproj", "{484CB025-0B26-4A99-9730-8A87FF62E110}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedbackExtractor.Orchestration", "FeedbackExtractor.Orchestration\FeedbackExtractor.Orchestration.csproj", "{58E557CB-B41B-433B-B66E-EAB5E8AF4E27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{484CB025-0B26-4A99-9730-8A87FF62E110}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{484CB025-0B26-4A99-9730-8A87FF62E110}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{484CB025-0B26-4A99-9730-8A87FF62E110}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E557CB-B41B-433B-B66E-EAB5E8AF4E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E557CB-B41B-433B-B66E-EAB5E8AF4E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E557CB-B41B-433B-B66E-EAB5E8AF4E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E557CB-B41B-433B-B66E-EAB5E8AF4E27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

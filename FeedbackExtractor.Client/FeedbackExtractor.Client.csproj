@@ -32,6 +32,7 @@
     <ProjectReference Include="..\FeedbackExtractor.Core\FeedbackExtractor.Core.csproj" />
     <ProjectReference Include="..\FeedbackExtractor.DocumentIntelligence\FeedbackExtractor.DocumentIntelligence.csproj" />
     <ProjectReference Include="..\FeedbackExtractor.OpenAI\FeedbackExtractor.OpenAI.csproj" />
+    <ProjectReference Include="..\FeedbackExtractor.Orchestration\FeedbackExtractor.Orchestration.csproj" />
   </ItemGroup>
 
   <ItemGroup>

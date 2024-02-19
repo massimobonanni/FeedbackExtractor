@@ -6,6 +6,7 @@ using FeedbackExtractor.Core.Implementations;
 using FeedbackExtractor.Core.Interfaces;
 using FeedbackExtractor.DocumentIntelligence.Implementations;
 using FeedbackExtractor.OpenAI.Implementations;
+using FeedbackExtractor.Orchestration.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -37,18 +38,19 @@ namespace FeedbackExtractor.Client
             Ioc.Default.ConfigureServices(
                 new ServiceCollection()
                 .AddSingleton(config)
-                .AddTransient<IMessenger>(sp=> WeakReferenceMessenger.Default)
+                .AddTransient<IMessenger>(sp => WeakReferenceMessenger.Default)
                 .AddKeyedSingleton<IFeedbackExtractor, MockFeedbackExtractor>(ExtractorImplementations.Mock)
                 .AddKeyedSingleton<IFeedbackExtractor, DocumentFeedbackExtractor>(ExtractorImplementations.DocumentIntelligence_Base)
                 .AddKeyedSingleton<IFeedbackExtractor, CustomFeedbackExtractor>(ExtractorImplementations.DocumentIntelligence_Custom)
                 .AddKeyedSingleton<IFeedbackExtractor, OpenAIFeedbackExtractor>(ExtractorImplementations.OpenAI)
+                .AddKeyedSingleton<IFeedbackExtractor, OrchestratorFeedbackExtractor>(ExtractorImplementations.Mixed_Models)
                 .AddTransient<MainWindowViewModel>()
                 .AddHttpClient()
                 .AddLogging()
                 .BuildServiceProvider()
             );
 
-            
+
         }
     }
 
