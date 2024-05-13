@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FeedbackExtractor.Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920">
+        Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized" WindowStartupLocation="CenterScreen" >
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -36,7 +36,8 @@
 
             <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,5,0,5" Command="{Binding SelectFileCommand}">Select File</Button>
 
-            <WebBrowser Name="FileView" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5,0,5"/>
+            <WebBrowser Name="FileView" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5,0,5" 
+                        ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
 
             <Button Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,5,0,5" Command="{Binding ExtractSessionFeedbackCommand}">Extract Feedback</Button>
 

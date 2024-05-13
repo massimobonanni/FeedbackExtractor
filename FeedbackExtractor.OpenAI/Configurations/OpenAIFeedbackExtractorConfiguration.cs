@@ -35,7 +35,7 @@ namespace FeedbackExtractor.OpenAI.Configurations
         /// </summary>
         public string FullUrl
         {
-            get => $"{this.Endpoint}/openai/deployments/{this.ModelName}/chat/completions?api-version=2023-12-01-preview";
+            get => $"{this.Endpoint}/openai/deployments/{this.ModelName}/chat/completions?api-version=2024-02-15-preview";
         }
 
         /// <summary>
