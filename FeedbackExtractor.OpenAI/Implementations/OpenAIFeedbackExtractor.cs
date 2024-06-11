@@ -8,6 +8,12 @@ using Newtonsoft.Json;
 using System.Text;
 using OpenAiEntities = FeedbackExtractor.OpenAI.Entities;
 using CoreEntities = FeedbackExtractor.Core.Entities;
+using Azure;
+using OpenAI.Chat;
+using OpenAI;
+using static System.Net.Mime.MediaTypeNames;
+using System.ClientModel;
+using Azure.Messaging;
 
 namespace FeedbackExtractor.OpenAI.Implementations
 {
@@ -34,19 +40,62 @@ namespace FeedbackExtractor.OpenAI.Implementations
             this.httpClient = httpClient;
         }
 
+        public async Task<CoreEntities.SessionFeedback> ExtractSessionFeedbackAsync(Stream sourceDocument, CancellationToken cancellationToken = default)
+        {
+            var imageBytes = await BinaryData.FromStreamAsync(sourceDocument);
+
+            var options = new OpenAIClientOptions()
+            {
+                 Endpoint = new Uri(this.config.Endpoint)
+            };
+
+            OpenAIClient client = new OpenAIClient(new ApiKeyCredential(this.config.Key), options);
+
+            var chatClient = client.GetChatClient(this.config.ModelName);
+            var chatOptions = new ChatCompletionOptions()
+            {
+                MaxTokens = 100,
+                Temperature = 0.0f,
+            };
+
+            var messages = new List<ChatMessage>
+            {
+                ChatMessage.CreateSystemMessage(Prompts.System),
+                ChatMessage.CreateUserMessage(new List<ChatMessageContentPart>()
+                {
+                    ChatMessageContentPart.CreateImageMessageContentPart(imageBytes,"image/jpeg",ImageChatMessageContentPartDetail.Auto),
+                    ChatMessageContentPart.CreateTextMessageContentPart(Prompts.User)
+                })
+            };
+
+
+
+            try
+            {
+                var response = await chatClient.CompleteChatAsync(messages, chatOptions);
+            }
+            catch (Exception ex) 
+            {
+
+                throw;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Extracts session feedback asynchronously.
         /// </summary>
         /// <param name="sourceDocument">The source document.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The extracted session feedback.</returns>
-        public async Task<CoreEntities.SessionFeedback> ExtractSessionFeedbackAsync(Stream sourceDocument, CancellationToken cancellationToken = default)
+        public async Task<CoreEntities.SessionFeedback> ExtractSessionFeedback2Async(Stream sourceDocument, CancellationToken cancellationToken = default)
         {
             var encodedImage = sourceDocument.ToBase64String();
 
             httpClient.DefaultRequestHeaders.Add("api-key", this.config.Key);
 
-            var payload = OpenAIVisionUtility.GeneratedPayloadForFeedbackForm(encodedImage,this.config.ImageDetail);
+            var payload = OpenAIVisionUtility.GeneratedPayloadForFeedbackForm(encodedImage, this.config.ImageDetail);
 
             try
             {

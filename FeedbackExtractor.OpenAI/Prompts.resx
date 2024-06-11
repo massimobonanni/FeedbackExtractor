@@ -139,6 +139,6 @@ The comment is in the box at the bottom of the image.
 If you are not able to extract data, put the string “&lt;error&gt;” in the field.
 If you are not able to extract the entire set of data, return empty string.
 
-{</value>
+Return message in JSON format, not MarkDown format.</value>
   </data>
 </root>
