@@ -49,9 +49,8 @@ namespace FeedbackExtractor.OpenAI.Implementations
                  Endpoint = new Uri(this.config.Endpoint)
             };
 
-            OpenAIClient client = new OpenAIClient(new ApiKeyCredential(this.config.Key), options);
+            var chatClient = new ChatClient( this.config.ModelName, new ApiKeyCredential(this.config.Key), options);
 
-            var chatClient = client.GetChatClient(this.config.ModelName);
             var chatOptions = new ChatCompletionOptions()
             {
                 MaxTokens = 100,
