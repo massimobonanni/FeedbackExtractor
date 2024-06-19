@@ -14,6 +14,8 @@ using OpenAI;
 using static System.Net.Mime.MediaTypeNames;
 using System.ClientModel;
 using Azure.Messaging;
+using Azure.AI.OpenAI;
+using FeedbackExtractor.OpenAI.Extensions;
 
 namespace FeedbackExtractor.OpenAI.Implementations
 {
@@ -40,16 +42,22 @@ namespace FeedbackExtractor.OpenAI.Implementations
             this.httpClient = httpClient;
         }
 
+
+        /// <summary>
+        /// Extracts session feedback asynchronously.
+        /// </summary>
+        /// <param name="sourceDocument">The source document.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The extracted session feedback.</returns>
+
         public async Task<CoreEntities.SessionFeedback> ExtractSessionFeedbackAsync(Stream sourceDocument, CancellationToken cancellationToken = default)
         {
             var imageBytes = await BinaryData.FromStreamAsync(sourceDocument);
 
-            var options = new OpenAIClientOptions()
-            {
-                 Endpoint = new Uri(this.config.Endpoint)
-            };
-
-            var chatClient = new ChatClient( this.config.ModelName, new ApiKeyCredential(this.config.Key), options);
+            AzureOpenAIClient azureClient = new(
+                new Uri(this.config.Endpoint),
+                new ApiKeyCredential(this.config.Key));
+            ChatClient chatClient = azureClient.GetChatClient(this.config.ModelName);
 
             var chatOptions = new ChatCompletionOptions()
             {
@@ -62,80 +70,35 @@ namespace FeedbackExtractor.OpenAI.Implementations
                 ChatMessage.CreateSystemMessage(Prompts.System),
                 ChatMessage.CreateUserMessage(new List<ChatMessageContentPart>()
                 {
-                    ChatMessageContentPart.CreateImageMessageContentPart(imageBytes,"image/jpeg",ImageChatMessageContentPartDetail.Auto),
+                    ChatMessageContentPart.CreateImageMessageContentPart(imageBytes,
+                        "image/jpeg",this.config.ImageDetail.ToImageChatMessageDetail()),
                     ChatMessageContentPart.CreateTextMessageContentPart(Prompts.User)
                 })
             };
 
-
-
             try
             {
                 var response = await chatClient.CompleteChatAsync(messages, chatOptions);
+
+                this.logger.LogInformation($"Usage data: totalTokens={response.Value.Usage.TotalTokens}; promptTokens={response.Value.Usage.InputTokens}; completionTokens={response.Value.Usage.OutputTokens}");
+
+                var content = response.Value.Content.FirstOrDefault();
+                if (content != null)
+                {
+                    var responseData = JsonConvert.DeserializeObject<OpenAiEntities.SessionFeedback>(content.Text);
+                    if (responseData != null)
+                    {
+                        return responseData.ToFeedbackSession();
+                    }
+                }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
 
                 throw;
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Extracts session feedback asynchronously.
-        /// </summary>
-        /// <param name="sourceDocument">The source document.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The extracted session feedback.</returns>
-        public async Task<CoreEntities.SessionFeedback> ExtractSessionFeedback2Async(Stream sourceDocument, CancellationToken cancellationToken = default)
-        {
-            var encodedImage = sourceDocument.ToBase64String();
-
-            httpClient.DefaultRequestHeaders.Add("api-key", this.config.Key);
-
-            var payload = OpenAIVisionUtility.GeneratedPayloadForFeedbackForm(encodedImage, this.config.ImageDetail);
-
-            try
-            {
-                var response = await httpClient.PostAsync(this.config.FullUrl,
-                        new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json"));
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responsePayload = await response.Content.ReadAsStringAsync();
-
-                    var visionResponse = JsonConvert.DeserializeObject<VisionResponse>(responsePayload);
-
-                    this.logger.LogInformation($"Usage data: totalTokens={visionResponse.usage.total_tokens}; promptTokens={visionResponse.usage.prompt_tokens}; completionTokens={visionResponse.usage.completion_tokens}");
-
-                    if (visionResponse.choices.Any())
-                    {
-                        var visionContent = visionResponse.choices[0].message?.content;
-                        if (!visionContent.StartsWith("{"))
-                        {
-                            visionContent = $"{{{visionContent}";
-                        }
-                        var responseData = JsonConvert.DeserializeObject<OpenAiEntities.SessionFeedback>(visionContent);
-                        return responseData.ToFeedbackSession();
-                    }
-                    else
-                    {
-                        logger.LogError($"Failed to extract feedback from the document. No choices returned");
-                        return null;
-                    }
-                }
-                else
-                {
-                    logger.LogError($"Failed to extract feedback from the document. Status code: {response.StatusCode}");
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, $"Exception during call OpenAI service");
-                throw;
-            }
         }
     }
 }
