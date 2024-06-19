@@ -94,7 +94,7 @@ namespace FeedbackExtractor.OpenAI.Implementations
             }
             catch (Exception ex)
             {
-
+                this.logger.LogError(ex, "Error extracting session feedback from OpenAI.");
                 throw;
             }
 
