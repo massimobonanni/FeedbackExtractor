@@ -54,8 +54,7 @@ namespace FeedbackExtractor.OpenAI.Implementations
         {
             var imageBytes = await BinaryData.FromStreamAsync(sourceDocument);
 
-            AzureOpenAIClient azureClient = new(
-                new Uri(this.config.Endpoint),
+            AzureOpenAIClient azureClient = new(new Uri(this.config.Endpoint),
                 new ApiKeyCredential(this.config.Key));
             ChatClient chatClient = azureClient.GetChatClient(this.config.ModelName);
 
