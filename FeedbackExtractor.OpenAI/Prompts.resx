@@ -131,7 +131,8 @@
     "SpeakerQuality":5,
     "Comment":""
 }
-
+The EventName field is a string and its value is on the line on the right of the "EventName" label.
+The SessionCode field is a string and its value is on the line on the right of the "SessionCode" label.
 The EventQuality field is an integer value from 1 to 5 and it is represented by the checked square in the second row of the first table: starting from the left, if the first square is checked then the value is 1; if the second square is checked then the value is 2; if the third square is checked then the value is 3; if the forth square is checked then the value is 4; If the fifth square is checked then the value is 5. if you don’t find any checked squares in the row, set the value 0.
 The SessionQuality field is an integer value from 1 to 5 and it is represented by the checked square in the second row of the second table:: starting from the left, if the first square is checked then the value is 1; if the second square is checked then the value is 2; if the third square is checked then the value is 3; if the forth square is checked then the value is 4; If the fifth square is checked then the value is 5. if you don’t find any checked squares in the row, set the value 0.
 The SpeakerQuality field is an integer value from 1 to 5 and it is represented by the checked square in the second row of the third table: starting from the left, if the first square is checked then the value is 1; if the second square is checked then the value is 2; if the third square is checked then the value is 3; if the forth square is checked then the value is 4; If the fifth square is checked then the value is 5. if you don’t find any checked squares in the row, set the value 0.

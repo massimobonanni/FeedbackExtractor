@@ -80,8 +80,9 @@ namespace FeedbackExtractor.OpenAI {
         ///    &quot;SpeakerQuality&quot;:5,
         ///    &quot;Comment&quot;:&quot;&quot;
         ///}
-        ///
-        ///The EventQuality field is an integer value from 1 to 5 and it is represented by the checked square in the second row of the first table: starting from the left, if the first square is checked then the value is 1; if the second square is checked then the value is 2; if the th [rest of string was truncated]&quot;;.
+        ///The EventName field is a string and its value is on the line on the right of the &quot;EventName&quot; label.
+        ///The SessionCode field is a string and its value is on the line on the right of the &quot;SessionCode&quot; label.
+        ///The EventQuality field is an integer value from 1 to 5 and it is repres [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string User {
             get {
