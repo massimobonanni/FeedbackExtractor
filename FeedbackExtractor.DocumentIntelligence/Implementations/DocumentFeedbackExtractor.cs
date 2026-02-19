@@ -1,5 +1,6 @@
-﻿using Azure.AI.DocumentIntelligence;
-using Azure;
+﻿using Azure;
+using Azure.AI.DocumentIntelligence;
+using Azure.Identity;
 using FeedbackExtractor.Core.Entities;
 using FeedbackExtractor.Core.Interfaces;
 using FeedbackExtractor.DocumentIntelligence.Configurations;
@@ -38,26 +39,27 @@ namespace FeedbackExtractor.DocumentIntelligence.Implementations
         {
             var session = new SessionFeedback();
 
-            AzureKeyCredential credential = new AzureKeyCredential(this.config.Key);
-            DocumentIntelligenceClient client = new DocumentIntelligenceClient(new Uri(this.config.Endpoint), credential);
-
-            var options = new List<DocumentAnalysisFeature>() {
-                    DocumentAnalysisFeature.OcrHighResolution,
-                    DocumentAnalysisFeature.Languages,
-                    DocumentAnalysisFeature.KeyValuePairs
-                };
-
-            var request = new AnalyzeDocumentContent();
-            request.Base64Source = BinaryData.FromStream(sourceDocument);
+            DocumentIntelligenceClient client = null;
+            if (this.config.UseIdentity())
+            {
+                var credential = new ClientSecretCredential(this.config.TenantId, this.config.ClientId, this.config.ClientSecret);
+                client = new DocumentIntelligenceClient(new Uri(this.config.Endpoint),
+                   credential);
+            }
+            else
+            {
+                var credential = new AzureKeyCredential(this.config.Key);
+                client = new DocumentIntelligenceClient(new Uri(this.config.Endpoint), credential);
+            }
 
             try
             {
                 var operation = await client.AnalyzeDocumentAsync(WaitUntil.Started,
-                       "prebuilt-layout", request, features: options, cancellationToken: cancellationToken);
+                       "prebuilt-layout", BinaryData.FromStream(sourceDocument), cancellationToken);
                 do
                 {
                     await Task.Delay(125);
-                    await operation.UpdateStatusAsync(cancellationToken: cancellationToken);
+                    await operation.UpdateStatusAsync(cancellationToken);
                 } while (!operation.HasCompleted);
 
                 if (operation.HasValue)
