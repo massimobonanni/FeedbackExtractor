@@ -43,8 +43,8 @@ namespace FeedbackExtractor.DocumentIntelligence.Implementations
             DocumentIntelligenceClient client = new DocumentIntelligenceClient(new Uri(this.config.Endpoint), credential);
 
             var options = new List<DocumentAnalysisFeature>() {
-                    DocumentAnalysisFeature.OcrHighResolution,
-                    DocumentAnalysisFeature.Languages
+                    //DocumentAnalysisFeature.OcrHighResolution,
+                    //DocumentAnalysisFeature.Languages
                 };
 
             var request = new AnalyzeDocumentContent();
