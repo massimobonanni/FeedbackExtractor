@@ -32,6 +32,7 @@ namespace FeedbackExtractor.Client.ViewModels
                 ExtractorImplementations.OpenAI,
                 ExtractorImplementations.DocumentIntelligence_Base,
                 ExtractorImplementations.DocumentIntelligence_Custom,
+                ExtractorImplementations.ContentUnderstanding,
                 ExtractorImplementations.Mixed_Models
             ];
             this.ExtractedSessionFeedback = null;
@@ -77,6 +78,7 @@ namespace FeedbackExtractor.Client.ViewModels
                     break;
                 case ExtractorImplementations.DocumentIntelligence_Base:
                 case ExtractorImplementations.DocumentIntelligence_Custom:
+                case ExtractorImplementations.ContentUnderstanding:
                     filter = "PDF Documents (*.pdf)|*.pdf|Images (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
                     break;
             }

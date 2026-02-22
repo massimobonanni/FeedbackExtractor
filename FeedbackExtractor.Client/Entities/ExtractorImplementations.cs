@@ -12,6 +12,7 @@ namespace FeedbackExtractor.Client.Entities
         DocumentIntelligence_Base,
         DocumentIntelligence_Custom,
         OpenAI,
-        Mixed_Models
+        Mixed_Models,
+        ContentUnderstanding
     }
 }
