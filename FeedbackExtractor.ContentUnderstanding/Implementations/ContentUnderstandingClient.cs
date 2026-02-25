@@ -12,7 +12,23 @@ namespace FeedbackExtractor.ContentUnderstanding.Implementations
 {
     /// <summary>
     /// Client for interacting with the Azure Content Understanding service.
+    /// <para>
+    /// This client handles document analysis by uploading documents to blob storage,
+    /// submitting them to the Azure Content Understanding API, and polling for results.
+    /// It supports both API key and Azure AD (client credentials) authentication.
+    /// </para>
     /// </summary>
+    /// <remarks>
+    /// This class implements <see cref="IContentUnderstandingClient"/> and is registered as an internal service.
+    /// It requires an <see cref="IHttpClientFactory"/> for HTTP communication, an <see cref="IBlobStorageClient"/>
+    /// for temporary blob storage of documents, and configuration via <see cref="ContentUnderstandingClientConfiguration"/>.
+    /// Uploaded blobs are automatically cleaned up after the analysis completes or fails.
+    /// </remarks>
+    internal class ContentUnderstandingClient : IContentUnderstandingClientandingClient"/> and is registered as an internal service.
+    /// It requires an <see cref="IHttpClientFactory"/> for HTTP communication, an <see cref="IBlobStorageClient"/>
+    /// for temporary blob storage of documents, and configuration via <see cref="ContentUnderstandingClientConfiguration"/>.
+    /// Uploaded blobs are automatically cleaned up after the analysis completes or fails.
+    /// </remarks>
     internal class ContentUnderstandingClient : IContentUnderstandingClient
     {
         private readonly ContentUnderstandingClientConfiguration config;
@@ -63,6 +79,17 @@ namespace FeedbackExtractor.ContentUnderstanding.Implementations
             }
         }
 
+        /// <summary>
+        /// Configures the <see cref="HttpClient"/> with the appropriate authentication headers.
+        /// </summary>
+        /// <remarks>
+        /// If Azure AD identity is configured (tenant ID, client ID, and client secret), a bearer token
+        /// is obtained via <see cref="ClientSecretCredential"/> for the Cognitive Services scope.
+        /// Otherwise, the API subscription key is added as the <c>Ocp-Apim-Subscription-Key</c> header.
+        /// </remarks>
+        /// <param name="client">The <see cref="HttpClient"/> instance to configure.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>A task representing the asynchronous configuration operation.</returns>
         private async Task ConfigureHttpClientAsync(HttpClient client, CancellationToken cancellationToken)
         {
             if (this.config.UseIdentity())
@@ -78,6 +105,17 @@ namespace FeedbackExtractor.ContentUnderstanding.Implementations
             }
         }
 
+        /// <summary>
+        /// Submits a document URL to the Azure Content Understanding analyzer for analysis.
+        /// </summary>
+        /// <param name="client">The configured <see cref="HttpClient"/> to use for the request.</param>
+        /// <param name="documentUrl">The SAS URL of the document to analyze.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>
+        /// The <c>Operation-Location</c> header value from the response, which is used to poll
+        /// for the analysis result; or <c>null</c> if the header is not present.
+        /// </returns>
+        /// <exception cref="HttpRequestException">Thrown when the API request returns a non-success status code.</exception>
         private async Task<string?> SubmitDocumentForAnalysisAsync(HttpClient client, string documentUrl, CancellationToken cancellationToken)
         {
             var endpoint = this.config.Endpoint.TrimEnd('/');
@@ -88,10 +126,7 @@ namespace FeedbackExtractor.ContentUnderstanding.Implementations
 
             var requestBody = new
             {
-                inputs = new[]
-                {
-                    new { url = documentUrl }
-                }
+                url = documentUrl
             };
 
             var jsonContent = new StringContent(
@@ -118,6 +153,21 @@ namespace FeedbackExtractor.ContentUnderstanding.Implementations
             return null;
         }
 
+        /// <summary>
+        /// Polls the specified operation location until the analysis completes, fails, or is cancelled.
+        /// </summary>
+        /// <remarks>
+        /// The method polls every 500 milliseconds. It returns the <see cref="AnalyzeResponse"/>
+        /// when the status is <c>Succeeded</c>, or <c>null</c> when the status is <c>Failed</c>,
+        /// <c>Cancelled</c>, or the <paramref name="cancellationToken"/> is triggered.
+        /// </remarks>
+        /// <param name="client">The configured <see cref="HttpClient"/> to use for polling requests.</param>
+        /// <param name="operationLocation">The operation location URL to poll for the result.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>
+        /// The <see cref="AnalyzeResponse"/> if the analysis succeeded; otherwise, <c>null</c>.
+        /// </returns>
+        /// <exception cref="HttpRequestException">Thrown when a polling request returns a non-success status code.</exception>
         private async Task<AnalyzeResponse?> PollForResultAsync(HttpClient client, string operationLocation, CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)

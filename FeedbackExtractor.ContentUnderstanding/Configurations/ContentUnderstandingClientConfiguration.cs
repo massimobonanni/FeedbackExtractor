@@ -60,7 +60,7 @@ namespace FeedbackExtractor.ContentUnderstanding.Configurations
                 TenantId = config[$"{ConfigRootName}:TenantId"],
                 ClientId = config[$"{ConfigRootName}:ClientId"],
                 ClientSecret = config[$"{ConfigRootName}:ClientSecret"],
-                ApiVersion = config[$"{ConfigRootName}:ApiVersion"] ?? "2025-11-01"
+                ApiVersion = config[$"{ConfigRootName}:ApiVersion"] ?? "2025-05-01-preview"
             };
 
             if (config[$"{ConfigRootName}:ApiVersion"] != null)
