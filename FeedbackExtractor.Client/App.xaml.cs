@@ -4,6 +4,7 @@ using FeedbackExtractor.Client.Entities;
 using FeedbackExtractor.Client.ViewModels;
 using FeedbackExtractor.Core.Implementations;
 using FeedbackExtractor.Core.Interfaces;
+using FeedbackExtractor.ContentUnderstanding.Extensions;
 using FeedbackExtractor.ContentUnderstanding.Implementations;
 using FeedbackExtractor.DocumentIntelligence.Implementations;
 using FeedbackExtractor.OpenAI.Implementations;
@@ -46,6 +47,7 @@ namespace FeedbackExtractor.Client
                 .AddKeyedSingleton<IFeedbackExtractor, OpenAIFeedbackExtractor>(ExtractorImplementations.OpenAI)
                 .AddKeyedSingleton<IFeedbackExtractor, OrchestratorFeedbackExtractor>(ExtractorImplementations.Mixed_Models)
                 .AddKeyedSingleton<IFeedbackExtractor, ContentUnderstandingFeedbackExtractor>(ExtractorImplementations.ContentUnderstanding)
+                .AddContentUnderstandingClient()
                 .AddTransient<MainWindowViewModel>()
                 .AddHttpClient()
                 .AddLogging()

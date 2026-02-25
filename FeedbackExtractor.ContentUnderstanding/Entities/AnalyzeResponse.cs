@@ -5,7 +5,7 @@ namespace FeedbackExtractor.ContentUnderstanding.Entities
     /// <summary>
     /// Represents the response from the Content Understanding analyze operation.
     /// </summary>
-    internal class AnalyzeResponse
+    public class AnalyzeResponse
     {
         /// <summary>
         /// Gets or sets the operation ID.
@@ -29,7 +29,7 @@ namespace FeedbackExtractor.ContentUnderstanding.Entities
     /// <summary>
     /// Represents the result content from the Content Understanding analyze operation.
     /// </summary>
-    internal class AnalyzeResultContent
+    public class AnalyzeResultContent
     {
         /// <summary>
         /// Gets or sets the analyzer ID used.
@@ -53,7 +53,7 @@ namespace FeedbackExtractor.ContentUnderstanding.Entities
     /// <summary>
     /// Represents a single content item in the analysis result.
     /// </summary>
-    internal class AnalyzeContent
+    public class AnalyzeContent
     {
         /// <summary>
         /// Gets or sets the fields extracted from the content.
@@ -71,7 +71,7 @@ namespace FeedbackExtractor.ContentUnderstanding.Entities
     /// <summary>
     /// Represents a field extracted from the analyzed content.
     /// </summary>
-    internal class AnalyzeField
+    public class AnalyzeField
     {
         /// <summary>
         /// Gets or sets the type of the field.

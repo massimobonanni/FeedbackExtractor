@@ -1,34 +1,28 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Globalization;
+using Microsoft.Extensions.Configuration;
 
 namespace FeedbackExtractor.ContentUnderstanding.Configurations
 {
     /// <summary>
-    /// Represents the configuration for the Content Understanding feedback extractor.
+    /// Represents the configuration for the Blob Storage client.
     /// </summary>
-    internal class ContentUnderstandingFeedbackExtractorConfiguration
+    internal class BlobStorageClientConfiguration
     {
         const string ConfigRootName = "ContentUnderstanding";
 
         /// <summary>
-        /// Gets or sets the API key for the Content Understanding service.
+        /// Gets or sets the storage endpoint for the Blob Storage account.
+        /// </summary>
+        public Uri Endpoint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the blob container to use.
+        /// </summary>
+        public string ContainerName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the key for the Blob Storage account.
         /// </summary>
         public string Key { get; set; }
-
-        /// <summary>
-        /// Gets or sets the endpoint URL for the Content Understanding service.
-        /// </summary>
-        public string Endpoint { get; set; }
-
-        /// <summary>
-        /// Gets or sets the analyzer name to use for content analysis.
-        /// </summary>
-        public string AnalyzerName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the API version to use. Defaults to "2025-05-01-preview".
-        /// </summary>
-        public string ApiVersion { get; set; } = "2025-05-01-preview";
 
         /// <summary>
         /// Gets or sets the Azure AD tenant ID for authentication.
@@ -46,25 +40,31 @@ namespace FeedbackExtractor.ContentUnderstanding.Configurations
         public string ClientSecret { get; set; }
 
         /// <summary>
-        /// Loads the Content Understanding feedback extractor configuration from the specified configuration.
+        /// Gets or sets the SAS token expiry duration in minutes. Defaults to 15 minutes.
+        /// </summary>
+        public int SasExpiryMinutes { get; set; }
+
+        /// <summary>
+        /// Loads the Blob Storage client configuration from the specified configuration.
         /// </summary>
         /// <param name="config">The configuration object.</param>
-        /// <returns>The loaded Content Understanding feedback extractor configuration.</returns>
-        public static ContentUnderstandingFeedbackExtractorConfiguration Load(IConfiguration config)
+        /// <returns>The loaded Blob Storage client configuration.</returns>
+        public static BlobStorageClientConfiguration Load(IConfiguration config)
         {
-            var retVal = new ContentUnderstandingFeedbackExtractorConfiguration()
+            var retVal = new BlobStorageClientConfiguration()
             {
+                Endpoint = new Uri(config[$"{ConfigRootName}:StorageEndpoint"]),
+                ContainerName = config[$"{ConfigRootName}:ContainerName"],
                 Key = config[$"{ConfigRootName}:Key"],
-                Endpoint = config[$"{ConfigRootName}:Endpoint"],
-                AnalyzerName = config[$"{ConfigRootName}:AnalyzerName"],
                 TenantId = config[$"{ConfigRootName}:TenantId"],
                 ClientId = config[$"{ConfigRootName}:ClientId"],
-                ClientSecret = config[$"{ConfigRootName}:ClientSecret"]
+                ClientSecret = config[$"{ConfigRootName}:ClientSecret"],
+                SasExpiryMinutes = 15
             };
 
-            if (config[$"{ConfigRootName}:ApiVersion"] != null)
+            if (int.TryParse(config[$"{ConfigRootName}:SasExpiryMinutes"], out var expiryMinutes))
             {
-                retVal.ApiVersion = config[$"{ConfigRootName}:ApiVersion"];
+                retVal.SasExpiryMinutes = expiryMinutes;
             }
 
             return retVal;
