@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackExtractor.DocumentI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedbackExtractor.Orchestration", "FeedbackExtractor.Orchestration\FeedbackExtractor.Orchestration.csproj", "{58E557CB-B41B-433B-B66E-EAB5E8AF4E27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedbackExtractor.ContentUnderstanding", "FeedbackExtractor.ContentUnderstanding\FeedbackExtractor.ContentUnderstanding.csproj", "{E8467198-74B3-4E37-AE27-971C35AA0741}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{58E557CB-B41B-433B-B66E-EAB5E8AF4E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58E557CB-B41B-433B-B66E-EAB5E8AF4E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58E557CB-B41B-433B-B66E-EAB5E8AF4E27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8467198-74B3-4E37-AE27-971C35AA0741}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8467198-74B3-4E37-AE27-971C35AA0741}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8467198-74B3-4E37-AE27-971C35AA0741}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8467198-74B3-4E37-AE27-971C35AA0741}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
